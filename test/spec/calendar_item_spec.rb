@@ -13,8 +13,8 @@ describe Viewpoint::EWS::CalendarItem, "functionality testing" do
     creds = JSON.load(File.open("#{File.dirname(__FILE__)}/creds.json",'r'))
     Viewpoint::EWS::EWS.endpoint = creds['endpoint']
     Viewpoint::EWS::EWS.set_auth(creds['user'],creds['pass'])
-    @v_start = DateTime.parse("#{Date.today}T14:00:00-06:00")
-    @v_end   = DateTime.parse("#{Date.today}T15:00:00-06:00")
+    @v_start = DateTime.parse("#{Date.today}T14:00:00-05:00")
+    @v_end   = DateTime.parse("#{Date.today}T15:00:00-05:00")
   end
 
 
@@ -27,6 +27,7 @@ describe Viewpoint::EWS::CalendarItem, "functionality testing" do
 
       citem = Viewpoint::EWS::CalendarItem.create_item_from_hash(item)
       citem.should be_instance_of(Viewpoint::EWS::CalendarItem)
+      citem.time_zone.should be_eql('Eastern Standard Time') 
       citem.recycle!.should be_true
     end
 
