@@ -7,22 +7,23 @@ require 'date'
 # To run this test put a file called 'creds.json' in this directory with the following format:
 #   {"user":"myuser","pass":"mypass","endpoint":"https://mydomain.com/ews/exchange.asmx"}
 
-
 describe Viewpoint::EWS::CalendarItem, "functionality testing" do
   before(:all) do
     creds = JSON.load(File.open("#{File.dirname(__FILE__)}/creds.json",'r'))
     Viewpoint::EWS::EWS.endpoint = creds['endpoint']
     Viewpoint::EWS::EWS.set_auth(creds['user'],creds['pass'])
-    @v_start = DateTime.parse("#{Date.today}T14:00:00-05:00")
-    @v_end   = DateTime.parse("#{Date.today}T15:00:00-05:00")
+
+    @v_start = DateTime.parse("#{Date.today}T14:00:00Z-0500")
+    @v_end = DateTime.parse("#{Date.today}T15:00:00Z-0500")
   end
 
 
   describe "class methods for CalendarItem" do
     it 'should #create_item_from_hash' do
       item = { :subject => {:text => 'RSpec Testing'},
-        :start => {:text => @v_start.to_s},
-        :end => {:text => @v_end.to_s}
+        :start => {:text => "2011-11-30T14:00:00-05:00"},
+        :end => {:text => "2011-11-30T15:00:00-05:00"},
+        :meeting_time_zone => {:time_zone_name => "Eastern Standard Time" }
       }
 
       citem = Viewpoint::EWS::CalendarItem.create_item_from_hash(item)
